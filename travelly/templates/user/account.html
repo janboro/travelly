@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Account{% endblock title %}
+
+{% block content %}
+  <!-- Head -->
+  <section class="account-head bg-primary py-3">
+    <div class="container grid">
+      <div>
+        <h1 class="xl">Account</h1>
+        <p class="lead">Manage your account detail here</p>
+      </div>
+      <img src="{{ url_for('static', filename='images/profile.svg')}}" alt="">
+    </div>
+  </section>
+
+<!-- Edit account -->
+<section class="account">
+    <div class="container grid">
+        <div class="account-text">
+            <h1>Update your account</h1>
+            <p> Your account info is outdated? Fill in the
+                form and update in now!
+            </p>
+        </div>
+
+        <div class="update-account-form card">
+            <img class="" src="{{ image_file }}">
+
+            <form method="POST" action="" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <fieldset class="">
+                    <div class="">
+                        {% if form.username.errors %}
+                        {{ form.username(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.username(class="form-control") }}
+                        {% endif %}
+                    </div>
+                    <div class="">
+                        {% if form.email.errors %}
+                        {{ form.email(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.email(class="form-control") }}
+                        {% endif %}
+                    </div>
+                    <div class="update-photo">
+                        {{ form.picture.label() }}
+                        <label class="file">
+                            {{ form.picture(class="") }}
+                        </label>
+                        {% if form.picture.errors %}
+                            {% for error in form.picture.errors %}
+                                <span class="text-danger">{{ error }} </span><br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </fieldset>
+                <div class="">
+                    {{ form.submit(class="btn btn-outline-info") }}
+            </form>
+        </div>
+
+    </div>
+</section>
+{% endblock content %}

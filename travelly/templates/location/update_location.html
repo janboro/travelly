@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}
+    Update
+{% endblock title %}
+
+{% block content %}
+<!-- update location -->
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <fieldset class="">
+        <legend class="">Update Location</legend>
+        <div class="">
+            {{ form.street.label }}
+            {% if form.street.errors %}
+                {{ form.street }}
+                <div class="invalid-feedback">
+                    {% for error in form.street.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.street }}
+            {% endif %}
+        </div>
+        <div class="">
+            {{ form.number.label }}
+            {% if form.number.errors %}
+                {{ form.number }}
+                <div class="invalid-feedback">
+                    {% for error in form.number.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.number }}
+            {% endif %}
+        </div>
+        <div class="">
+            {{ form.code.label }}
+            {% if form.code.errors %}
+                {{ form.code }}
+                <div class="invalid-feedback">
+                    {% for error in form.code.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.code }}
+            {% endif %}
+        </div>
+        <div class="">
+            {{ form.city.label }}
+            {% if form.city.errors %}
+                {{ form.city|capitalize }}
+                <div class="invalid-feedback">
+                    {% for error in form.city.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.city }}
+            {% endif %}
+        </div>
+    </fieldset>
+    <div class="form-group">
+        {{ form.submit(class="") }}
+    </div>
+</form>
+{% endblock content %}

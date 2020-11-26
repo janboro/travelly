@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Travelly{% endblock title %}
+
+{% block content %}
+    <!-- Showcase -->
+    <section class="showcase bg-primary">
+        <div class="container grid">
+            <div class="showcase-text">
+                <h1>Save time and money</h1>
+                <p> Try our route planning tool built for 
+                    your business. From large scale enterprises 
+                    to local companies, travelly will help you 
+                    save time, money and clients. Sign Up and 
+                    bring your business to a new level!
+                </p>
+                <a href="{{ url_for('users.register') }}" class="btn btn-outline">Sign Up Now</a>
+            </div>
+
+            <img src="{{ url_for('static', filename='images/dark_map.svg')}}" alt="">
+        </div>
+    </section>
+
+
+    <!-- Features -->
+    <section class="features bg-light">
+        <div class="container">
+            <h3 class="features-heading text-center m-1">
+                Welcome to Travelly, the best route planner app on the market. 
+                All you need to start is to load your data and we take care of the rest!
+            </h3>
+
+            <div class="grid grid-3 text-center my-4">
+                <div>
+                    <i class="fas fa-map-marker-alt fa-3x"></i>
+                    <h3>Add Locations</h3>
+                    <p class="text-secondary">Add them manually or load a CSV file</p>
+                </div>
+                <div>
+                    <i class="fas fa-location-arrow fa-3x"></i>
+                    <h3>Find a Route</h3>
+                    <p class="text-secondary">Send route via e-mail to carrier</p>
+                </div>
+                <div>
+                    <i class="fas fa-dollar-sign fa-3x"></i>
+                    <h3>Spend Less</h3>
+                    <p class="text-secondary">Save money by spending less on fuel</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Description -->
+    <section class="description bg-light">
+        <div class="container grid">
+            <img src="{{ url_for('static', filename='images/web_page_map.svg')}}" alt="">
+
+            <div class="card">
+                <h3>Easy to learn</h3>
+                <p>Create an account and use it today</p>
+            </div>
+
+            <div class="card">
+                <h3>AI technology</h3>
+                <p>We're using artificial intelligence 
+                    in order to find the best route for you</p>
+            </div>
+            
+            <div class="card">
+                <h3>No credid needed</h3>
+                <p>Travelly is a free to use platform and we won't charge you even a dollar!
+                    
+                </p>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

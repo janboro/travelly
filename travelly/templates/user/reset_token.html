@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Reset Password{% endblock title %}
+
+{% block content %}
+<section class="reset-password">
+    <div class="container grid">
+        <div class="reset-password-text">
+            <h1>Change Password</h1>
+            <p> Forgot you password? Fill out the form and change it now.
+            </p>
+        </div>
+
+        <div class="reset-password-form card">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="">
+                    <legend class="">Reset Password</legend>
+                    <!-- Password -->
+                        {% if form.password.errors %}
+                        {{ form.password(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.password(class="form-control") }}
+                        {% endif %}
+                    <!-- Confirm Password -->
+                        {% if form.confirm_password.errors %}
+                        {{ form.confirm_password(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.confirm_password(class="form-control") }}
+                        {% endif %}
+                </fieldset>
+            
+                <div class="">
+                    {{ form.submit(class="btn") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

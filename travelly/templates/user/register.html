@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock title %}
+
+{% block content %}
+
+<!-- Registration -->
+<section class="register">
+    <div class="container grid">
+        <div class="register-text">
+            <h1>Register an Account</h1>
+            <p> Don't have an account yet? Fill out the form and 
+                start your journey today!
+            </p>
+        </div>
+
+        <div class="register-form card">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="">
+                    <legend class="">Join Today</legend>
+                        <!-- Username -->
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username(class="form-control") }}
+                        {% endif %}
+                        <!-- Email -->
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control") }}
+                        {% endif %}
+                        <!-- Password -->
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-control") }}
+                        {% endif %}
+                        <!-- Confirm Password -->
+                        {% if form.confirm_password.errors %}
+                            {{ form.confirm_password(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.confirm_password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.confirm_password(class="form-control form-control-lg") }}
+                        {% endif %}
+                </fieldset>
+                <div class="my-1">
+                    {{ form.submit(class="btn") }}
+                </div>
+                <small class="">
+                    Already Have An Account? <a class="" href="{{ url_for('users.login') }}">Sign In</a>
+                </small>
+            </form>
+
+        </div>  
+    </div> 
+</section>
+
+{% endblock content %}

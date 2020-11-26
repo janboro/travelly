@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+<section class="login">
+    <div class="container grid">
+        <div class="login-text">
+            <h1>Log In to your Account</h1>
+            <p> Already have an account? Log in and start using all the tools
+                you need!
+            </p>
+        </div>
+
+        <div class="login-form card">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="">
+                    <legend class="">Log In</legend>
+                        <!-- Email -->
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control") }}
+                        {% endif %}
+                        <!-- Password -->
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-control") }}
+                        {% endif %}
+                        <!-- Remember -->
+                        {{ form.remember}}
+                        {{ form.remember.label}}
+                </fieldset>
+    
+                <div class="my-1">
+                    {{ form.submit(class="btn") }}
+                </div>
+                <small class="">
+                    Need An Account? <a class="" href="{{ url_for('users.register') }}">Sign Up Now</a>
+                </small>
+                <br>
+                <small class="text-muted">
+                    <a href="{{ url_for('users.reset_request') }}">Forgot Password?</a>
+                </small>
+            </form>
+    
+            <div class="">
+                
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

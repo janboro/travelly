@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ location.street }}{% endblock title %}
+
+{% block content %}
+{{ location.street }}, {{ location.number }}, {{ location.code }}, {{ location.city }}, {{ location.lat}}, {{ location.lng }}
+{% if location.author == current_user %}
+      <div>
+        <form action="{{ url_for('locations.update_location', location_id=location.id) }}" method="POST">
+          <input class="" type="submit" value="Update">
+        </form>
+        <form action="{{ url_for('locations.delete_location', location_id=location.id) }}" method="POST">
+          <input class="" type="submit" value="Delete">
+        </form>
+        
+    </div>
+{% endif %}
+{% endblock content %}

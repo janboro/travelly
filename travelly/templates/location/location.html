@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% block title %}
+    Locations
+{% endblock  title%}
+
+{% block content %}
+  <!-- Head -->
+  <section class="location-head bg-primary py-3">
+    <div class="container grid">
+      <div>
+        <h1 class="xl">Locations</h1>
+        <p class="lead">Manage and add your locations here</p>
+      </div>
+      <img src="{{ url_for('static', filename='images/locations.svg')}}" alt="">
+    </div>
+  </section>
+
+  <!-- Locations content -->
+  <section class="location-content bg-light">
+    <!-- If there are no locations -->  
+    {% if locations.total < 1 %}
+    <div class="container grid">
+      <!-- Add Start Form -->
+      <div class="add-start-form card">
+        <form method="POST" action="">
+          {{ add_location_form.hidden_tag() }}
+          <fieldset class="">
+              <legend class="">Add start</legend>
+              <div class="">
+                <!-- Street -->
+                  {% if add_location_form.street.errors %}
+                      {{ add_location_form.street(class="form-control is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in add_location_form.street.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ add_location_form.street(class="form-control") }}
+                  {% endif %}
+              </div>
+              <!-- Number -->
+              <div class="">
+                  {% if add_location_form.number.errors %}
+                      {{ add_location_form.number(class="form-control is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in add_location_form.number.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ add_location_form.number(class="form-control") }}
+                  {% endif %}
+              </div>
+              <!-- City Code -->
+              <div class="">
+                  {% if add_location_form.code.errors %}
+                      {{ add_location_form.code(class="form-control is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in add_location_form.code.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ add_location_form.code(class="form-control") }}
+                  {% endif %}
+              </div>
+              <!-- City -->
+              <div class="">
+                  {% if add_location_form.city.errors %}
+                      {{ add_location_form.city(class="form-control is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in add_location_form.city.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ add_location_form.city(class="form-control") }}
+                  {% endif %}
+              </div>
+          </fieldset>
+          <!-- Submit -->
+          <div class="form-group">
+              {{ add_location_form.submit(class="btn") }}
+          </div>
+        </form>
+      </div>
+
+      <div class="no-locations-text">
+        <h1>Add a starting point</h1>
+        <p>There are no current locations in your database.
+            First add a starting from where you will start every trip.
+        </p>
+      </div>
+    </div>
+
+    <!-- If there are locations -->
+    {% else %}
+    <div class="container">
+      <div class="locations-data grid-1">
+        <form method="POST" class="delete_multiple" action="{{ url_for('locations.delete_multiple') }}">
+          <table class="location-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" onclick="toggle(this)" id="check_all"></th>
+                <!-- <th>Id</th> -->
+                <th>Street</th>
+                <th>Number</th>
+                <th>City Code</th>
+                <th>City</th>
+                <th>Planner</th>
+                <th>More</th>
+              </tr>
+            </thead>
+            {% for location in locations.items %}
+            <tbody>
+              <tr class="clickable-row" data-href="{{ url_for('locations.detail', location_id=location.id) }}">
+                <td><input type="checkbox" value="{{ location.id}} " name="location_checkbox"></td>
+                <!-- <td>{{ location.id }}</td> -->
+                <td>{{ location.street }}</td>
+                <td>{{ location.number }}</td>
+                <td>{{ location.code }}</td>
+                <td>{{ location.city }}</td>
+                <td class="in-planner">
+                  {% if location.in_planner == False %}
+                    <a href="{{ url_for('plan.add', location_id=location.id) }}">Add</a>
+                  {% else %}
+                    <a href="{{ url_for('plan.remove', location_id=location.id) }}">Remove</a>
+                  {% endif %}
+                </td>
+                <td class="action">
+                  <a href="{{ url_for('locations.detail', location_id=location.id) }}">Detail</a>
+                </td>
+              </tr>
+            </tbody>
+            {% endfor %}
+          </table>
+          <div class="del-paginate">
+            <input type="submit" class="delete-selected btn btn-outline-light" value="Delete Selected">
+            <!-- Pagination -->
+            <div class="location-pagination pagination">
+              {% for page_num in locations.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
+                {% if page_num %}
+                  {% if locations.page == page_num %}
+                    <a class="pagination-main-page" href="{{ url_for('locations.location', locations=locations, page=page_num) }}">{{ page_num }}</a>
+                  {% else %}
+                    <a class="pagination-secondary-page" href="{{ url_for('locations.location', locations=locations, page=page_num) }}">{{ page_num }}</a>
+                  {% endif %}
+                {% else %}
+                  ...
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="empty-div">
+              <!-- empty div for flexbox -->
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+    
+  <!-- Add Locations -->
+  <section class="add-locations my-2">
+    <div class="container grid">
+      <!-- Add Locations -->
+      <div class="add-location-form card">
+        <form method="POST" action="">
+          {{ add_location_form.hidden_tag() }}
+          <fieldset class="">
+            <legend class="">Add Location</legend>
+            <div class="">
+              <!-- Street -->
+                {% if add_location_form.street.errors %}
+                    {{ add_location_form.street(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in add_location_form.street.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ add_location_form.street(class="form-control") }}
+                {% endif %}
+            </div>
+            <!-- Number -->
+            <div class="">
+                {% if add_location_form.number.errors %}
+                    {{ add_location_form.number(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in add_location_form.number.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ add_location_form.number(class="form-control") }}
+                {% endif %}
+            </div>
+            <!-- City Code -->
+            <div class="">
+                {% if add_location_form.code.errors %}
+                    {{ add_location_form.code(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in add_location_form.code.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ add_location_form.code(class="form-control") }}
+                {% endif %}
+            </div>
+            <!-- City -->
+            <div class="">
+                {% if add_location_form.city.errors %}
+                    {{ add_location_form.city(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in add_location_form.city.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ add_location_form.city(class="form-control") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <!-- Submit -->
+        <div class="form-group">
+            {{ add_location_form.submit(class="btn") }}
+        </div>
+      </form>
+    </div>
+    <!-- Add locations from CSV -->
+    <div class="CSV-form card">
+      <form method="POST"  action="" enctype="multipart/form-data">
+        {{ CSV_form.hidden_tag() }}
+          <fieldset class="CSV-form">
+            <legend class="">Load CSV</legend>
+            <p>Add locations in bulk with a CSV file</p>
+            <label class="file">
+              {{ CSV_form.csv }}
+            </label>
+            {% if CSV_form.csv.errors %}
+              {% for error in CSV_form.csv.errors %}
+                <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+            {% endif %}      
+            <div class="">
+              {{ CSV_form.submit(class="btn") }}
+            </div>
+          </fieldset>
+      </form>
+    </div>
+  </section>
+  {% endif %}
+{% endblock content %}

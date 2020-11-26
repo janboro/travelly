@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}
+    Plan
+{% endblock title %}
+
+{% block content %}
+  <!-- Head -->
+  <section class="planner-head bg-primary py-3">
+    <div class="container grid">
+      <div>
+        <h1 class="xl">Planner</h1>
+        <p class="lead">Plan your route and start your trip</p>
+      </div>
+      <img src="{{ url_for('static', filename='images/notes.svg')}}" alt="">
+    </div>
+  </section>
+
+  <!-- Plan description with Map -->
+  <section class="map-content bg-light py-2">
+    <div class="container grid">
+      <div class="map-content-text">
+        <h1>Plan your route</h1>
+        <p> With your locations selected for planning, all that
+          is left to do is planning your trip! Click the button and
+          wait for the magic to happen.
+        </p>
+        <a href="{{ url_for('plan.branch_and_bound') }}" class="btn">Show Route</a>
+      </div>
+
+      <div class="map card">
+        {{ map|safe }}
+      </div>
+    </div>
+  </section>
+
+  <!-- Locations Planned -->
+  <section class="locations-planned">
+    <div class="container">
+      <div class="locations-plan-data grid-1">
+        {% if locations.total < 1 %}
+          <h1>There are no locations to travel to. Add them <a href="{{url_for('locations.location')}}" class="text-secondary">here</a>!</h1>
+        {% else %}
+          <h1>Selected locations to travel to:</h1>
+          <table class="location-table">
+            <thead>
+              <tr>
+                <th>Street</th>
+                <th>Number</th>
+                <th>City Code</th>
+                <th>City</th>
+              </tr>
+            </thead>
+
+            {% for location in locations.items %}
+              <tbody>
+                <tr>
+                  <td>{{ location.street }}</td>
+                  <td>{{ location.number }}</td>
+                  <td>{{ location.code }}</td>
+                  <td>{{ location.city }}</td>
+                </tr>
+              </tbody>
+            {% endfor %}
+          </table>
+          <!-- Pagination -->
+          <div class="plan-pagination-box">
+            <div class="location-planned-pagination pagination">
+              {% for page_num in locations.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
+                {% if page_num %}
+                  {% if locations.page == page_num %}
+                    <a class="pagination-main-page" href="{{ url_for('locations.location', locations=locations, page=page_num) }}">{{ page_num }}</a>
+                  {% else %}
+                    <a class="pagination-secondary-page" href="{{ url_for('locations.location', locations=locations, page=page_num) }}">{{ page_num }}</a>
+                  {% endif %}
+                {% else %}
+                  ...
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+
+
+ 
+{% endblock content %}
