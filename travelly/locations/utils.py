@@ -5,7 +5,7 @@ import urllib
 import json
 import csv
 from flask import flash, current_app
-from travelly import db
+from travelly.travelly import db
 from travelly.models import Location
 
 

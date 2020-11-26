@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, redirect, url_for, request
 from flask_login import current_user, login_required
 from flask_sqlalchemy import sqlalchemy
-from travelly import db
+from travelly.travelly import db
 from travelly.models import Location
 from travelly.plan.utils import create_map, get_matrix, route_map
 from travelly.plan.BranchAndBound import TSP_bnb

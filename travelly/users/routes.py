@@ -1,6 +1,6 @@
 from flask import render_template, url_for, redirect, request, flash, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from travelly import db, bcrypt
+from travelly.travelly import db, bcrypt
 from travelly.models import User, Location
 from travelly.users.forms import (
     RegistrationForm,

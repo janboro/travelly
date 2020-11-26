@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, abort, Blueprint
 from flask_login import current_user, login_required
-from travelly import db
+from travelly.travelly import db
 from travelly.locations.forms import AddLocationForm, UpdateLocationForm, CSVForm
 from travelly.models import Location
 from travelly.locations.utils import (

@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import url_for, current_app
 from flask_mail import Message
-from travelly import mail
+from travelly.travelly import mail
 
 
 def save_picture(form_picture):

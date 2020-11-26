@@ -1,6 +1,6 @@
-from travelly import create_app
+from travelly.travelly import *
 
-app = create_app()
 
 if __name__ == "__main__":
+    app = create_app()
     app.run(debug=True)
