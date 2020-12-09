@@ -7,17 +7,13 @@ from travelly.travelly import mail
 
 
 def save_picture(form_picture):
-    # generating a random hex as a new file name
     random_hex = secrets.token_hex(8)
-    # extracting the file extension from uploaded file
     _, f_ext = os.path.splitext(form_picture.filename)
-    # creating a new picture filename to be stored in our database
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(
         current_app.root_path, "static/profile_pics", picture_fn
     )
 
-    # resizing the picture to 125px by 125px
     output_size = (125, 125)
     img = Image.open(form_picture)
     img.thumbnail(output_size)
