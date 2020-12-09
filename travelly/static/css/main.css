@@ -227,7 +227,8 @@ form a {
 
 .register .card,
 .login .card,
-.account .card {
+.account .card, 
+.location-content .card{
   margin: 60px 0;
 }
 
