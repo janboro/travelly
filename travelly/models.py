@@ -44,7 +44,6 @@ class Location(db.Model):
     lat = db.Column(db.Float, nullable=False)
     lng = db.Column(db.Float, nullable=False)
     in_planner = db.Column(db.Boolean, default=False, nullable=False)
-    path_order = db.Column(db.Integer, default=None)
 
     def __repr__(self):
         return f"Location('{self.street},{self.number},{self.code},\

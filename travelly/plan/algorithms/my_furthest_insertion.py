@@ -1,9 +1,10 @@
-from utils import get_final_cost
+from travelly.plan.utils import get_final_cost
+
 
 def get_furthest_neighbour(matrix, visited, node):
     max = -1
     max_index = -1
-    
+
     for i in range(len(matrix)):
         if visited[i] == True or i == node:
             pass
@@ -13,8 +14,9 @@ def get_furthest_neighbour(matrix, visited, node):
                 max_index = i
     return max_index, max
 
+
 def get_insertion_index(distance_matrix, path, visited, next_node):
-    cost = float('inf')
+    cost = float("inf")
     insert_index = int()
     for i in path:
         index = i
@@ -24,9 +26,11 @@ def get_insertion_index(distance_matrix, path, visited, next_node):
             temp = path.index(index) + 1
             next_index = path[temp]
 
-        current_cost = distance_matrix[index][next_node] +\
-                        distance_matrix[next_node][next_index]-\
-                        distance_matrix[index][next_index]
+        current_cost = (
+            distance_matrix[index][next_node]
+            + distance_matrix[next_node][next_index]
+            - distance_matrix[index][next_index]
+        )
 
         if current_cost < cost:
             cost = current_cost
@@ -43,7 +47,7 @@ def solve(matrix, visited, path=[], node=0):
         visited[node] = True
         next_node, _ = get_furthest_neighbour(matrix, visited, node)
         path.append(next_node)
-        
+
     else:
         maximum = -1
         next_node = int()
@@ -55,7 +59,6 @@ def solve(matrix, visited, path=[], node=0):
         insert_index = get_insertion_index(matrix, path, visited, next_node)
         path.insert(insert_index, next_node)
     visited[next_node] = True
-    
 
     return solve(matrix, visited, path, next_node)
 

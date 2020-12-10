@@ -21,10 +21,50 @@
       <div class="map-content-text">
         <h1>Plan your route</h1>
         <p> With your locations selected for planning, all that
-          is left to do is planning your trip! Click the button and
-          wait for the magic to happen.
+          is left to do is planning your trip! Choose an algorithm, 
+          click the button and wait for the magic to happen.
         </p>
-        <a href="{{ url_for('plan.branch_and_bound') }}" class="btn">Show Route</a>
+        
+        {% if locations.total < 1 %}
+          <h2>There are no locations to travel to.</h2>
+          <h3 class="btn"><a href="{{url_for('locations.location')}}" class="text-light">Add them here!</a></h3>
+        
+        {% else %}
+          <div class="select-box">
+            <form method="POST" class="get_route" action="{{ url_for('plan.get_route') }}">
+              <div class="options-container">  
+                <div class="option">
+                  <input type="radio" value="christofides" class="radio" id="christofides" name="algorithm"/>
+                  <label for="christofides">Christofides</label>
+                </div>
+                <div class="option">
+                  <input type="radio" class="radio" id="path_cheapest_arc" name="algorithm" value="path_cheapest_arc"/>
+                  <label for="path_cheapest_arc">Path Cheapest Arc</label>
+                </div>
+                <div class="option">
+                  <input type="radio" class="radio" id="nearest_neighbour" name="algorithm" value="nearest_neighbour"/>
+                  <label for="nearest_neighbour">Nearest Neighbour</label>
+                </div>
+                <div class="option">
+                  <input type="radio" class="radio" id="nearest_insertion" name="algorithm" value="nearest_insertion"/>
+                  <label for="nearest_insertion">Nearest Insertion</label>
+                </div>
+                <div class="option">
+                  <input type="radio" class="radio" id="furthest_insertion" name="algorithm" value="furthest_insertion"/>
+                  <label for="furthest_insertion">Furtherst Insertion</label>
+                </div>
+                <div class="option">
+                  <input type="radio" class="radio" id="two_opt" name="algorithm" value="two_opt"/>
+                  <label for="two_opt">2-opt</label>
+                </div>
+              </div>
+              <input type="submit" class="btn" name="submit_button" value="Show Route">
+              <div class="selected">
+                Choose your algorithm
+              </div>
+            </form>
+          </div>
+        {% endif %}
       </div>
 
       <div class="map card">
@@ -38,7 +78,6 @@
     <div class="container">
       <div class="locations-plan-data grid-1">
         {% if locations.total < 1 %}
-          <h1>There are no locations to travel to. Add them <a href="{{url_for('locations.location')}}" class="text-secondary">here</a>!</h1>
         {% else %}
           <h1>Selected locations to travel to:</h1>
           <table class="location-table">

@@ -146,7 +146,7 @@ form a {
 .showcase p,
 .map-content p,
 .map-content-planned p {
-  margin: 20px 0;
+  margin: 20px 0 30px;
 }
 
 .showcase img {
@@ -405,6 +405,102 @@ form a {
   justify-self: flex-end;
 }
 
+/* Algorithm selector */
+
+.select-box {
+  width: 300px;
+  color: #fff;
+  margin: 20px 0;
+}
+
+.select-box form {
+  width: 250px !important;
+  padding: 0px !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.select-box input {
+  width: 140px;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  margin: 10px 0;
+  padding: 10px 30px;
+  line-height: 1.6;
+  order: 2;
+  margin-top: 20px;
+}
+
+.select-box .options-container {
+  background: #fff;
+  color: #333;
+  max-height: 0;
+  width: 100%;
+  opacity: 0;
+  transition: all 0.4s;
+  border-radius: 8px;
+  overflow: hidden;
+  order: 1;
+  box-shadow: 0 3px 10px rgba(0,0,0,.1);
+}
+
+.selected {
+  background: #fff;
+  color: #333;
+  border-radius: 8px;
+  position: relative;
+  order: 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,.1);
+}
+
+.selected::after {
+  content: "";
+  background: url("/static/images/arrow-down-dark.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  height: 15px;
+  width: 32px;
+  right: 10px;
+  top: 20px;
+  transition: all 0.4s;
+}
+
+.select-box .options-container.active {
+  max-height: 225px;
+  opacity: 1;
+  overflow-y: scroll;
+  margin-top: 5px;
+}
+
+.select-box .options-container.active + .selected::after {
+  transform: rotateX(180deg);
+}
+
+.select-box .options-container {
+  scrollbar-width: none;
+}
+
+.selected {
+  padding: 12px 24px;
+  cursor: pointer;
+  display: block;
+}
+
+.select-box .option:hover {
+  background: var(--light-color);
+}
+
+.select-box label {
+  padding: 12px 24px;
+  cursor: pointer;
+  display: block;
+}
+
+.select-box .option .radio {
+  display: none;
+}
+
 /* Map */
 .map {
   box-sizing: border-box;
@@ -426,6 +522,10 @@ form a {
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+}
+
+.locations-planned {
+  min-height: 50px;
 }
 
 .locations-plan-data h1,

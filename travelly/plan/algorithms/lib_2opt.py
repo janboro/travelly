@@ -1,5 +1,6 @@
 from py2opt.routefinder import RouteFinder
 
+
 def solve_2opt(matrix):
     names = range(0, len(matrix))
     route_finder = RouteFinder(matrix, names)

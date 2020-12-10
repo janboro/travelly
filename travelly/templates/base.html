@@ -18,13 +18,13 @@
             <nav>
                 
                 <ul>
+                    <li><a href="{{ url_for('main.home') }}">Home</a></li>
                     {% if current_user.is_authenticated %}
                         <li><a href="{{ url_for('plan.planner') }}">Plan</a></li>
                         <li><a href="{{ url_for('locations.location') }}">Locations</a></li>
                         <li><a href="{{ url_for('users.account') }}">Account</a></li>
                         <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
                     {% else %}
-                        <li><a href="{{ url_for('main.home') }}">Home</a></li>
                         <li><a href="{{ url_for('main.about') }}">About</a></li>
                         <li><a href="{{ url_for('users.login') }}">Login</a></li>
                     {% endif %}

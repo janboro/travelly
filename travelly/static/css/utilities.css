@@ -165,7 +165,7 @@
 
 }
 
-.alert-error {
+.alert-danger {
   background-color: var(--error-color);
   color: #fff;
 }

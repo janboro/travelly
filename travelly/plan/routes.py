@@ -1,10 +1,17 @@
-from flask import render_template, Blueprint, redirect, url_for, request
+from flask import render_template, Blueprint, redirect, url_for, request, flash
 from flask_login import current_user, login_required
 from flask_sqlalchemy import sqlalchemy
 from travelly.travelly import db
 from travelly.models import Location
 from travelly.plan.utils import create_map, get_matrix, route_map
-from travelly.plan.BranchAndBound import TSP_bnb
+
+# from travelly.plan.BranchAndBound import TSP_bnb
+from ortools.constraint_solver import routing_enums_pb2
+from travelly.plan.algorithms.ORTools_solver import ORsolve
+from travelly.plan.algorithms.my_NN import solve_my_NN
+from travelly.plan.algorithms.my_nearest_insertion import solve_nearest_insertion
+from travelly.plan.algorithms.my_furthest_insertion import solve_furthest_insertion
+from travelly.plan.algorithms.lib_2opt import solve_2opt
 
 plan = Blueprint("plan", __name__)
 
@@ -65,32 +72,68 @@ def remove_from_plan(location_id):
     return redirect(url_for("plan.planner"))
 
 
-@plan.route("/planner/branch_and_bound")
+@plan.route("/planner/get_route", methods=["POST"])
 @login_required
-def branch_and_bound():
-    locations = Location.query.filter(
-        (Location.user_id == current_user.id), (Location.in_planner == True)
-    )
+def get_route():
+    if request.method == "POST":
+        algorithm = request.form.get("algorithm")
 
-    matrix = get_matrix(locations)
-    print(matrix)
+        if algorithm == None:
+            flash("Please choose an algorithm before proceeding", "danger")
+            return redirect(url_for("plan.planner"))
 
-    path, cost = TSP_bnb(matrix)
-    print(path)
+        locations = Location.query.filter(
+            (Location.user_id == current_user.id), (Location.in_planner == True)
+        ).order_by(Location.id)
 
-    # rv = TSP_bnb(matrix)
-    # print(rv)
+        locations_list = []
+        for location in locations:
+            loc = (
+                location.street,
+                location.number,
+                location.code,
+                location.city,
+                location.lat,
+                location.lng,
+            )
+            locations_list.append(loc)
 
-    for location, path_id in zip(locations, path):
-        location.path_order = path_id
-        # db.session.commit()
-    page = request.args.get("page", 1, type=int)
-    locations = locations.order_by(Location.path_order)
+        matrix = get_matrix(locations_list)
+        print(matrix)
 
-    map = route_map(locations=locations)
+        if algorithm == "christofides":
+            solver_method = routing_enums_pb2.FirstSolutionStrategy.CHRISTOFIDES
+            path, cost = ORsolve(matrix, solver_method)
 
-    return render_template(
-        "planner/planned_route.html",
-        map=map,
-        locations=locations.paginate(page=page, per_page=10),
-    )
+        elif algorithm == "path_cheapest_arc":
+            solver_method = routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
+            path, cost = ORsolve(matrix, solver_method)
+
+        elif algorithm == "nearest_neighbour":
+            path, cost = solve_my_NN(matrix)
+
+        elif algorithm == "nearest_insertion":
+            path, cost = solve_nearest_insertion(matrix)
+
+        elif algorithm == "furthest_insertion":
+            path, cost = solve_furthest_insertion(matrix)
+
+        elif algorithm == "two_opt":
+            path, cost = solve_2opt(matrix)
+        else:
+            abort(404)
+
+        ordered_locations = []
+        for path_id in path:
+            ordered_locations.append(locations_list[path_id])
+
+        page = request.args.get("page", 1, type=int)
+        # locations = locations.order_by(Location.path_order)
+
+        map = route_map(locations=ordered_locations)
+
+        return render_template(
+            "planner/planned_route.html",
+            map=map,
+            locations=locations.paginate(page=page, per_page=10),
+        )
