@@ -5,65 +5,78 @@
 
 {% block content %}
 <!-- update location -->
-<form method="POST" action="">
-    {{ form.hidden_tag() }}
-    <fieldset class="">
-        <legend class="">Update Location</legend>
-        <div class="">
-            {{ form.street.label }}
-            {% if form.street.errors %}
-                {{ form.street }}
-                <div class="invalid-feedback">
-                    {% for error in form.street.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.street }}
-            {% endif %}
+<section class="edit-location">
+    <div class="container grid">
+        <div class="edit-location-text">
+            <h1>Edit location detail</h1>
+            <p> Need to change your location detail? Fill the fields
+                you want to change and update them!
+            </p>
         </div>
-        <div class="">
-            {{ form.number.label }}
-            {% if form.number.errors %}
-                {{ form.number }}
-                <div class="invalid-feedback">
-                    {% for error in form.number.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
+
+        <div class="edit-location-form card">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="">
+                    <legend class="">Update Location</legend>
+                    <div class="">
+                        {{ form.street.label }}
+                        {% if form.street.errors %}
+                            {{ form.street }}
+                            <div class="invalid-feedback">
+                                {% for error in form.street.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.street }}
+                        {% endif %}
+                    </div>
+                    <div class="">
+                        {{ form.number.label }}
+                        {% if form.number.errors %}
+                            {{ form.number }}
+                            <div class="invalid-feedback">
+                                {% for error in form.number.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.number }}
+                        {% endif %}
+                    </div>
+                    <div class="">
+                        {{ form.code.label }}
+                        {% if form.code.errors %}
+                            {{ form.code }}
+                            <div class="invalid-feedback">
+                                {% for error in form.code.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.code }}
+                        {% endif %}
+                    </div>
+                    <div class="">
+                        {{ form.city.label }}
+                        {% if form.city.errors %}
+                            {{ form.city|capitalize }}
+                            <div class="invalid-feedback">
+                                {% for error in form.city.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.city }}
+                        {% endif %}
+                    </div>
+                </fieldset>
+                <div class="edit-location-submit">
+                    {{ form.submit(class="btn") }}
                 </div>
-            {% else %}
-                {{ form.number }}
-            {% endif %}
+            </form>
         </div>
-        <div class="">
-            {{ form.code.label }}
-            {% if form.code.errors %}
-                {{ form.code }}
-                <div class="invalid-feedback">
-                    {% for error in form.code.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.code }}
-            {% endif %}
-        </div>
-        <div class="">
-            {{ form.city.label }}
-            {% if form.city.errors %}
-                {{ form.city|capitalize }}
-                <div class="invalid-feedback">
-                    {% for error in form.city.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.city }}
-            {% endif %}
-        </div>
-    </fieldset>
-    <div class="form-group">
-        {{ form.submit(class="") }}
     </div>
-</form>
+</section>
 {% endblock content %}

@@ -4,6 +4,7 @@ from flask_sqlalchemy import sqlalchemy
 from travelly.travelly import db
 from travelly.models import Location
 from travelly.plan.utils import create_map, get_matrix, route_map
+from travelly.locations.utils import add_location_to_planner, remove_location_from_planner
 
 # from travelly.plan.BranchAndBound import TSP_bnb
 from ortools.constraint_solver import routing_enums_pb2
@@ -20,10 +21,10 @@ plan = Blueprint("plan", __name__)
 @login_required
 def planner():
     locations = Location.query.filter(Location.user_id == current_user.id).order_by(
-        Location.street
+        Location.id
     )
 
-    map = create_map(locations=locations)
+    map = create_map(locations=locations.order_by(Location.id))
 
     page = request.args.get("page", 1, type=int)
     planned_locations = Location.query.filter(
@@ -32,44 +33,18 @@ def planner():
     return render_template("planner/plan.html", map=map, locations=planned_locations)
 
 
-# @plan.plan_trip('/plan_trip')
-# @login_required
-# def plan_trip():
-#     locations = Location.query.filter(Location.in_planner==True)
-#     return
-
-
 @plan.route("/planner/add/<int:location_id>")
 @login_required
 def add(location_id):
-    location = Location.query.get_or_404(location_id)
-    if location.author != current_user:
-        abort(403)
-    location.in_planner = True
-    db.session.commit()
+    add_location_to_planner(location_id, current_user)
     return redirect(url_for("locations.location"))
 
 
 @plan.route("/planner/remove/<int:location_id>")
 @login_required
 def remove(location_id):
-    location = Location.query.get_or_404(location_id)
-    if location.author != current_user:
-        abort(403)
-    location.in_planner = False
-    db.session.commit()
+    remove_location_from_planner(location_id, current_user)
     return redirect(url_for("locations.location"))
-
-
-@plan.route("/planner/remove_from_plan/<int:location_id>")
-@login_required
-def remove_from_plan(location_id):
-    location = Location.query.get_or_404(location_id)
-    if location.author != current_user:
-        abort(403)
-    location.in_planner = False
-    db.session.commit()
-    return redirect(url_for("plan.planner"))
 
 
 @plan.route("/planner/get_route", methods=["POST"])
@@ -99,7 +74,6 @@ def get_route():
             locations_list.append(loc)
 
         matrix = get_matrix(locations_list)
-        print(matrix)
 
         if algorithm == "christofides":
             solver_method = routing_enums_pb2.FirstSolutionStrategy.CHRISTOFIDES
@@ -127,13 +101,20 @@ def get_route():
         for path_id in path:
             ordered_locations.append(locations_list[path_id])
 
+        order = []
+        for item in ordered_locations:
+            order.append(item[0])
+        print(order)
         page = request.args.get("page", 1, type=int)
-        # locations = locations.order_by(Location.path_order)
+        # locations = locations.order_by(sqlalchemy.func.field(Location.street, *order))
+
+        # loc
 
         map = route_map(locations=ordered_locations)
 
         return render_template(
             "planner/planned_route.html",
             map=map,
-            locations=locations.paginate(page=page, per_page=10),
+            locations= ordered_locations
+            # locations=locations.paginate(page=page, per_page=10),
         )

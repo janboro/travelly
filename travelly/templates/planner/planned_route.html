@@ -22,9 +22,9 @@
     <div class="container grid">
       <div class="map-content-planned-text">
         <h1>The shortest route</h1>
-        <p>Here is the shortest route to go 
-          to all your desired locations. Now you can 
-        forward it via mail to whoever needs it.</canvas>
+        <p>Here is the shortest route found by the algorithm you chose.
+          Follow the locations bellow in order, so you can have 
+          the shortest trip.</canvas>
         </p>
       </div>
 
@@ -38,48 +38,30 @@
   <section class="locations-ordered">
     <div class="container">
       <div class="locations-ordered-data grid-1">
-        {% if locations.total < 1 %}
-            <h1>There are no locations to travel to. Add them <a href="{{url_for('locations.location')}}" class="text-secondary">here</a>!</h1>
-        {% else %}
-          <h1>Follow these locations in order:</h4>
-          <table class="location-table">
-            <thead>
-              <tr>
-                <th>Street</th>
-                <th>Number</th>
-                <th>City Code</th>
-                <th>City</th>
-              </tr>
-            </thead>
+        <h1>Follow these locations in order:</h4>
+        <table class="location-table">
+          <thead>
+            <tr>
+              <th>Street</th>
+              <th>Number</th>
+              <th>City Code</th>
+              <th>City</th>
+            </tr>
+          </thead>
 
-            {% for location in locations.items %}
-              <tbody>
-                <tr>
-                  <td>{{ location.street }}</td>
-                  <td>{{ location.number }}</td>
-                  <td>{{ location.code }}</td>
-                  <td>{{ location.city }}</td>
-                </tr>
-              </tbody>
-            {% endfor %}
-          </table>
-          <!-- Pagination -->
-          <div class="plan-pagination-box">
-            <div class="location-planned-pagination pagination">
-              {% for page_num in locations.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
-                {% if page_num %}
-                  {% if locations.page == page_num %}
-                    <a class="pagination-main-page" href="{{ url_for('locations.location', locations=locations, page=page_num) }}">{{ page_num }}</a>
-                  {% else %}
-                    <a class="pagination-secondary-page" href="{{ url_for('locations.location', locations=locations, page=page_num) }}">{{ page_num }}</a>
-                  {% endif %}
-                {% else %}
-                  ...
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-        {% endif %}
+          {% for location in locations %}
+            <tbody>
+              <tr>
+                <td>{{ location[0] }}</td>
+                <td>{{ location[1] }}</td>
+                <td>{{ location[2] }}</td>
+                <td>{{ location[3] }}</td>
+              </tr>
+            </tbody>
+          {% endfor %}
+        </table>
+        <!-- Pagination -->
+
       </div>
     </div>
   </section>

@@ -89,7 +89,7 @@
       <div class="no-locations-text">
         <h1>Add a starting point</h1>
         <p>There are no current locations in your database.
-            First add a starting from where you will start every trip.
+            First add a starting point from where you will start every trip.
         </p>
       </div>
     </div>
@@ -98,7 +98,7 @@
     {% else %}
     <div class="container">
       <div class="locations-data grid-1">
-        <form method="POST" class="delete_multiple" action="{{ url_for('locations.delete_multiple') }}">
+        <form method="POST" class="selected-locations" action="{{ url_for('locations.selected') }}">
           <table class="location-table">
             <thead>
               <tr>
@@ -114,7 +114,7 @@
             </thead>
             {% for location in locations.items %}
             <tbody>
-              <tr class="clickable-row" data-href="{{ url_for('locations.detail', location_id=location.id) }}">
+              <tr>
                 <td><input type="checkbox" value="{{ location.id}} " name="location_checkbox"></td>
                 <!-- <td>{{ location.id }}</td> -->
                 <td>{{ location.street }}</td>
@@ -129,17 +129,17 @@
                   {% endif %}
                 </td>
                 <td class="action">
-                  <a href="{{ url_for('locations.detail', location_id=location.id) }}">Detail</a>
+                  <a href="{{ url_for('locations.update_location', location_id=location.id) }}">Edit</a>
                 </td>
               </tr>
             </tbody>
             {% endfor %}
           </table>
-          <div class="del-paginate">
-            <input type="submit" class="delete-selected btn btn-outline-light" value="Delete Selected">
+          <div class="grid grid-3 text-center table-options">
+            <input type="submit" name="action" class="delete-selected btn btn-outline-light" value="Delete Selected">
             <!-- Pagination -->
             <div class="location-pagination pagination">
-              {% for page_num in locations.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
+              {% for page_num in locations.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                 {% if page_num %}
                   {% if locations.page == page_num %}
                     <a class="pagination-main-page" href="{{ url_for('locations.location', locations=locations, page=page_num) }}">{{ page_num }}</a>
@@ -151,9 +151,8 @@
                 {% endif %}
               {% endfor %}
             </div>
-            <div class="empty-div">
-              <!-- empty div for flexbox -->
-            </div>
+            <input type="submit" name="action" class="add-selected btn btn-outline-light" value="Add to Plan">
+            <input type="submit" name="action" class="remove-selected btn btn-outline-light" value="Remove From Plan">
           </div>
         </form>
       </div>
@@ -234,7 +233,13 @@
         {{ CSV_form.hidden_tag() }}
           <fieldset class="CSV-form">
             <legend class="">Load CSV</legend>
-            <p>Add locations in bulk with a CSV file</p>
+            <p>
+              Don't want to input all your data by hand?
+              No worries! We've got the solution for you, upload 
+              all your data in a CSV following the format:
+            </p>
+            <h3>Street, Number, Code, City</h3>
+            <h2>Add locations in CSV</h2>
             <label class="file">
               {{ CSV_form.csv }}
             </label>

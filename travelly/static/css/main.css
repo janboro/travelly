@@ -219,7 +219,8 @@ form a {
 .login,
 .forgot-password,
 .reset-password,
-.account {
+.account,
+.edit-location {
   height: auto;
   background-color: var(--light-color);
   position: relative;
@@ -228,7 +229,8 @@ form a {
 .register .card,
 .login .card,
 .account .card, 
-.location-content .card{
+.location-content .card,
+.edit-location .card {
   margin: 60px 0;
 }
 
@@ -260,6 +262,10 @@ form a {
 .reset-password .grid {
   grid-template-columns: 55%, 45%;
   gap: 30px;
+}
+
+.edit-location-submit {
+  margin: 20px 0;
 }
 
 /* Account */
@@ -309,9 +315,11 @@ form a {
 }
 
 /* Locations Table */
-.delete_multiple {
+.selected-locations {
   width: 100%;
 }
+
+
 
 .location-table {
   border-collapse: collapse;
@@ -350,26 +358,38 @@ form a {
   color: var(--secondary-color)
 }
 /* Pagination */
-.del-paginate {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.delete-selected,
-.empty-div {
-  width: 128px;
-}
-
 .location-pagination {
-  justify-content: space-between;
+  min-width: 300px;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Delete Selected */
+.table-options {
+  width: 600px;
+  gap: 2px;
+  justify-content: center;
+  margin: auto;
+}
 
-.delete_multiple .btn {
-  text-align: left;
-  padding: 5px 15px;
+.add-selected,
+.remove-selected,
+.delete-selected {
+  width: 150px;
+  padding: 4px 15px;
+}
+
+.delete-selected {
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+
+.remove-selected {
+  grid-column-start: 2;
+  grid-column-start: 3;
 }
 
 /* Add Locations */
@@ -396,6 +416,15 @@ form a {
 
 .CSV-form label {
   font-weight: 800;
+}
+
+.CSV-form h2 {
+  margin: 40px 0 10px;
+}
+
+.CSV-form h3 {
+  margin-top: 20px;
+  font-weight: 550;
 }
 
 /* Plan Head */

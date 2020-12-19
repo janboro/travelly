@@ -9,6 +9,8 @@ from travelly.locations.utils import (
     remove_accents,
     import_csv,
     save_csv,
+    add_location_to_planner,
+    remove_location_from_planner
 )
 
 locations = Blueprint("locations", __name__)
@@ -20,7 +22,7 @@ def location():
     page = request.args.get("page", 1, type=int)
     locations = (
         Location.query.filter(Location.user_id == current_user.id)
-        .order_by(Location.street)
+        .order_by(Location.id)
         .paginate(page=page, per_page=10)
     )
 
@@ -105,15 +107,6 @@ def new_location():
     return redirect(url_for("locations.location"))
 
 
-@locations.route("/location/detail/<int:location_id>")
-@login_required
-def detail(location_id):
-    location = Location.query.get_or_404(location_id)
-    if location.author != current_user:
-        abort(403)
-    return render_template("location/detail.html", location=location)
-
-
 @locations.route("/location/<int:location_id>/delete", methods=["POST"])
 @login_required
 def delete_location(location_id):
@@ -129,12 +122,25 @@ def delete_location(location_id):
         flash("There was an error deleting that location")
 
 
-@locations.route("/location/delete_multiple", methods=["GET", "POST"])
-def delete_multiple():
+@locations.route("/location/selected", methods=["GET", "POST"])
+def selected():
     if request.method == "POST":
-        to_delete = request.form.getlist("location_checkbox")
-        for location_id in to_delete:
-            delete_location(location_id)
+        if request.form.get("action") == "Delete Selected":
+            to_delete = request.form.getlist("location_checkbox")
+            for location_id in to_delete:
+                delete_location(location_id)
+
+        if request.form.get("action") == "Add to Plan":
+            to_add = request.form.getlist("location_checkbox")
+            for location_id in to_add:
+                if location_id:
+                    add_location_to_planner(location_id, current_user)
+        
+        if request.form.get("action") == "Remove From Plan":
+            to_remove = request.form.getlist("location_checkbox")
+            for location_id in to_remove:
+                if location_id:
+                    remove_location_from_planner(location_id, current_user)
     return redirect(url_for("locations.location"))
 
 

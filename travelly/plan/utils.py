@@ -7,8 +7,9 @@ from travelly.models import Location
 
 
 def create_map(locations):
+    start_loc = locations.first()
     map = folium.Map(
-        location=[51.1079, 17.0385], zoom_start=12, width="100%", height="100%"
+        location=[start_loc.lat, start_loc.lng], zoom_start=12, width="100%", height="100%"
     )
     tooltip = "Click for more"
 
@@ -30,21 +31,22 @@ def create_map(locations):
 
 
 def route_map(locations):
+    start_loc = locations[0]
     map = folium.Map(
-        location=[51.1079, 17.0385], zoom_start=12, width="100%", height="100%"
+        location=[start_loc[4], start_loc[5]], zoom_start=12, width="100%", height="100%"
     )
     tooltip = "Click for more"
 
-    for location in locations:
-        folium.Marker(
-            [location[4], location[5]],
-            popup=(
-                f"{location[0]} {location[1]},\
-                                {location[2]}, {location[3]}"
-            ),
-            tooltip=tooltip,
-            icon=folium.Icon(color="red"),
-        ).add_to(map)
+    # for location in locations:
+    #     folium.Marker(
+    #         [location[4], location[5]],
+    #         popup=(
+    #             f"{location[0]} {location[1]},\
+    #                             {location[2]}, {location[3]}"
+    #         ),
+    #         tooltip=tooltip,
+    #         icon=folium.Icon(color="red"),
+    #     ).add_to(map)
 
     iterator = 0
     for i in range(len(locations) - 1):

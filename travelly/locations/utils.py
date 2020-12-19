@@ -112,3 +112,17 @@ def import_csv(csv_file, user_id):
             except Exception as e:
                 flash(f"Error: {e}")
     return
+
+def add_location_to_planner(location_id, user):
+    location = Location.query.get_or_404(location_id)
+    if location.author != user:
+        abort(403)
+    location.in_planner = True
+    db.session.commit()
+
+def remove_location_from_planner(location_id, user):
+    location = Location.query.get_or_404(location_id)
+    if location.author != user:
+        abort(403)
+    location.in_planner = False
+    db.session.commit()
